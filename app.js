@@ -15,29 +15,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeLeft = 0;
     let timer;
     let currentKeySignature;
+    let showingFeedback = false;
     
     // Hide exercise, score, and timer initially
     exerciseDiv.classList.add('hidden');
     scoreDiv.classList.add('hidden');
     timerContainer.classList.add('hidden');
     
-    // Define key signatures
+    // Define key signatures with accidental info
     const keySignatures = [
-        { name: 'C', key: 'C', mode: 'major' },
-        { name: 'G', key: 'G', mode: 'major' },
-        { name: 'D', key: 'D', mode: 'major' },
-        { name: 'A', key: 'A', mode: 'major' },
-        { name: 'E', key: 'E', mode: 'major' },
-        { name: 'B', key: 'B', mode: 'major' },
-        { name: 'F#', key: 'F#', mode: 'major' },
-        { name: 'C#', key: 'C#', mode: 'major' },
-        { name: 'F', key: 'F', mode: 'major' },
-        { name: 'B♭', key: 'Bb', mode: 'major' },
-        { name: 'E♭', key: 'Eb', mode: 'major' },
-        { name: 'A♭im', key: 'Ab', mode: 'major' },
-        { name: 'D♭', key: 'Db', mode: 'major' },
-        { name: 'G♭', key: 'Gb', mode: 'major' },
-        { name: 'C♭', key: 'Cb', mode: 'major' }
+        { name: 'C', key: 'C', mode: 'major', accidental: 'no accidentals' },
+        { name: 'G', key: 'G', mode: 'major', accidental: '1 sharp' },
+        { name: 'D', key: 'D', mode: 'major', accidental: '2 sharps' },
+        { name: 'A', key: 'A', mode: 'major', accidental: '3 sharps' },
+        { name: 'E', key: 'E', mode: 'major', accidental: '4 sharps' },
+        { name: 'B', key: 'B', mode: 'major', accidental: '5 sharps' },
+        { name: 'F#', key: 'F#', mode: 'major', accidental: '6 sharps' },
+        { name: 'C#', key: 'C#', mode: 'major', accidental: '7 sharps' },
+        { name: 'F', key: 'F', mode: 'major', accidental: '1 flat' },
+        { name: 'B♭', key: 'Bb', mode: 'major', accidental: '2 flats' },
+        { name: 'E♭', key: 'Eb', mode: 'major', accidental: '3 flats' },
+        { name: 'A♭', key: 'Ab', mode: 'major', accidental: '4 flats' },
+        { name: 'D♭', key: 'Db', mode: 'major', accidental: '5 flats' },
+        { name: 'G♭', key: 'Gb', mode: 'major', accidental: '6 flats' },
+        { name: 'C♭', key: 'Cb', mode: 'major', accidental: '7 flats' }
     ];
     
     function startExercise() {
@@ -85,6 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkAnswer(event.target.textContent, currentKeySignature.name);
             }
         });
+        
+        // Create feedback element with initial empty state to reserve space
+        const feedbackDiv = document.createElement('div');
+        feedbackDiv.id = 'feedback';
+        feedbackDiv.innerHTML = '&nbsp;'; // Non-breaking space to take up height
+        exerciseDiv.insertBefore(feedbackDiv, exerciseDiv.firstChild);
         
         nextQuestion();
         timer = setInterval(updateTimer, 1000);
@@ -184,6 +191,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const randomIndex = Math.floor(Math.random() * keySignatures.length);
         currentKeySignature = keySignatures[randomIndex];
         
+        // Only clear feedback when explicitly calling this function from startExercise
+        // but not when showing a new question after feedback
+        if (!showingFeedback) {
+            // Reset the feedback element to empty state but keep space reserved
+            const feedbackDiv = document.getElementById('feedback');
+            if (feedbackDiv) {
+                feedbackDiv.innerHTML = '&nbsp;'; // Non-breaking space to take up height
+                feedbackDiv.className = ''; // Remove any previous styling classes
+            }
+        }
+        
         // Render the key signature using VexFlow
         renderKeySignature(currentKeySignature);
     }
@@ -193,14 +211,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedClean = selected.replace(/\s+/g, '');
         const correctClean = correct.replace(/\s+/g, '').replace(/<[^>]*>/g, '');
         
+        // Get the feedback element
+        const feedbackDiv = document.getElementById('feedback');
+        
         if (selectedClean === correctClean) {
             correctCount++;
             correctCountSpan.textContent = correctCount;
+            
+            // Show correct feedback with the key signature info
+            feedbackDiv.textContent = `Correct! ${currentKeySignature.name} is ${currentKeySignature.accidental}`;
+            feedbackDiv.className = 'correct';
         } else {
             incorrectCount++;
+            
+            // Show incorrect feedback with the correct answer and user's answer
+            feedbackDiv.textContent = `Incorrect: ${currentKeySignature.accidental} is ${currentKeySignature.name}. You answered ${selected}`;
+            feedbackDiv.className = 'incorrect';
         }
+        
         totalCountSpan.textContent = correctCount + incorrectCount;
         
+        // Set the flag that we're showing feedback
+        showingFeedback = true;
+
         nextQuestion();
     }
 

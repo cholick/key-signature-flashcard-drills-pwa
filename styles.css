@@ -65,16 +65,6 @@ button#start-button {
     border-radius: 4px;
 }
 
-button#start-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-#timer {
-    margin-top: 20px;
-    font-size: 18px;
-}
-
 #timer-container {
     margin: 15px auto;
     width: 80%;
@@ -136,4 +126,25 @@ button#start-button:disabled {
 
 .modal-button:hover {
     background-color: #45a049;
+}
+
+#feedback {
+    margin: 10px auto;
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    max-width: 80%;
+    line-height: 1.2em; /* Adjust to deal with ♭ symbol needing more space */
+    min-height: 24px; /* Slightly increased to ensure space for text */
+    box-sizing: border-box; /* Include padding in height calculation */
+}
+
+#feedback.correct {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+}
+
+#feedback.incorrect {
+    background-color: rgba(244, 67, 54, 0.2);
+    color: #c62828;
 }
