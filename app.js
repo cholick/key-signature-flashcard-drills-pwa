@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const startTime = 10;
+    const startTime = 300;
 
     const startButton = document.getElementById('start-button');
     const exerciseDiv = document.getElementById('exercise');
