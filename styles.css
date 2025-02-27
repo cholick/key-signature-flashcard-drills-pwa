@@ -1,0 +1,97 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+#app {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+}
+
+#exercise {
+    margin: 20px 0;
+}
+
+#notation {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.choices {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 buttons per row */
+    grid-gap: 10px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.choice-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    /* Remove inline-block display as grid will handle layout */
+    display: block;
+    margin: 0; /* Remove margin as grid-gap will handle spacing */
+    width: 100%;
+    height: 100%;
+}
+
+.choice-button:hover {
+    background-color: #e0e0e0;
+}
+
+#score {
+    margin: 20px 0;
+}
+
+button#start-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+button#start-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#timer {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+#timer-container {
+    margin: 15px auto;
+    width: 80%;
+    height: 4px;
+    background-color: #eee;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#timer-bar {
+    height: 100%;
+    width: 100%;
+    background-color: #4CAF50;
+    transition: width 1s linear;
+}
+
+/* Hide elements initially */
+.hidden {
+    display: none;
+}
