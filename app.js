@@ -42,13 +42,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function startExercise() {
         correctCount = 0;
-        totalCount = 0;
+        incorrectCount = 0;
         timeLeft = startTime;
         correctCountSpan.textContent = correctCount;
         totalCountSpan.textContent = correctCount + incorrectCount;
         
-        // Reset timer bar to full width
+        // Reset timer bar to full width without animation
+        timerBar.style.transition = 'none'; // Disable transition
         timerBar.style.width = '100%';
+        
+        // Force a reflow to apply the changes immediately
+        void timerBar.offsetWidth;
+        
+        // Re-enable transition for subsequent updates
+        timerBar.style.transition = 'width 1s linear';
         
         // Hide the start button instead of disabling it
         startButton.classList.add('hidden');
@@ -92,12 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (timeLeft <= 0) {
             clearInterval(timer);
-            endExercise();
+            
+            // Small delay to allow the timer bar animation to complete
+            setTimeout(() => {
+                endExercise();
+            }, 1000);
         }
     }
 
     function endExercise() {
-        // Show the start button again instead of enabling it
+        // Show the start button again
         startButton.classList.remove('hidden');
         
         // Remove the choices when the exercise ends
@@ -105,7 +116,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (choicesDiv) {
             exerciseDiv.removeChild(choicesDiv);
         }
-        alert(`Time's up! Correct: ${correctCount}, Incorrect: ${incorrectCount}`);
+        
+        // Create and show the modal instead of alert
+        showResultModal();
+    }
+
+    function showResultModal() {
+        // Create the modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create the modal
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        
+        // Create modal content
+        const heading = document.createElement('h2');
+        const percent = Math.round((correctCount / (correctCount + incorrectCount)) * 100);
+        heading.textContent = `${percent}% Correct`;
+        
+        const resultText = document.createElement('p');
+        resultText.textContent = `You got ${correctCount} out of ${correctCount + incorrectCount} correct.`;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'modal-button';
+        closeButton.textContent = 'Close';
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(modalOverlay);
+        });
+        
+        // Assemble the modal
+        modal.appendChild(heading);
+        modal.appendChild(resultText);
+        modal.appendChild(closeButton);
+        modalOverlay.appendChild(modal);
+        
+        // Add the modal to the page
+        document.body.appendChild(modalOverlay);
     }
 
     function renderKeySignature(keySignature) {
