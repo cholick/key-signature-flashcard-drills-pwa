@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const correctCountSpan = document.getElementById('correct-count');
     const totalCountSpan = document.getElementById('total-count');
     const feedbackDiv = document.getElementById('feedback');
+    const choicesDiv = document.getElementById('choices');
+    const modeDisplayDiv = document.getElementById('mode-display');
 
     let correctCount = 0;
     let incorrectCount = 0;
@@ -116,10 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreDiv.classList.remove('hidden');
         timerContainer.classList.remove('hidden');
 
-        // Create the choices div once
-        const choicesDiv = document.createElement('div');
-        choicesDiv.className = 'choices';
-        exerciseDiv.appendChild(choicesDiv);
+        // Clear and show choices div
+        choicesDiv.innerHTML = '';
+        choicesDiv.classList.remove('hidden');
 
         // Create choice buttons for all possible keys
         allKeyOptions.forEach(keyName => {
@@ -170,12 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
         notationDiv.innerHTML = ''; // Clear the key signature
         feedbackDiv.classList.add('hidden');
         scoreDiv.classList.add('hidden');
+        modeDisplayDiv.classList.add('hidden');
         
-        // Remove the choices when the exercise ends
-        const choicesDiv = exerciseDiv.querySelector('.choices');
-        if (choicesDiv) {
-            exerciseDiv.removeChild(choicesDiv);
-        }
+        // Clear and hide the choices div
+        choicesDiv.innerHTML = '';
+        choicesDiv.classList.add('hidden');
 
         // Create and show the modal instead of alert
         showResultModal();
@@ -219,11 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear the notation div
         notationDiv.innerHTML = '';
         
-        // Add mode display element above key signature
-        const modeDisplay = document.createElement('div');
-        modeDisplay.className = 'mode-display';
-        modeDisplay.textContent = keySignature.mode === 'major' ? 'Major' : 'Minor';
-        notationDiv.appendChild(modeDisplay);
+        // Update mode display
+        modeDisplayDiv.textContent = keySignature.mode === 'major' ? 'Major' : 'Minor';
+        modeDisplayDiv.classList.remove('hidden');
 
         // Create a VexFlow renderer
         const VF = Vex.Flow;
