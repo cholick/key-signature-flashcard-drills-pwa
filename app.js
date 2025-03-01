@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timerBar.style.transition = 'width 1s linear';
 
         // Hide the controls container instead of just the start button
-        controlsContainer.classList.add('hidden');
+        controlsContainer.style.display = 'none'; // Use direct style instead of class
 
         // Show exercise, score, and timer
         exerciseDiv.classList.remove('hidden');
@@ -164,8 +164,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function endExercise() {
         // Show the controls container again
-        controlsContainer.classList.remove('hidden');
-
+        controlsContainer.style.display = ''; // Reset to default display
+        
+        // Hide the exercise elements
+        notationDiv.innerHTML = ''; // Clear the key signature
+        feedbackDiv.classList.add('hidden');
+        scoreDiv.classList.add('hidden');
+        
         // Remove the choices when the exercise ends
         const choicesDiv = exerciseDiv.querySelector('.choices');
         if (choicesDiv) {
@@ -246,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
         do {
             randomIndex = Math.floor(Math.random() * activeKeySignatures.length);
         } while (
-            // Keep trying until we get a different key signature than before
             previousKeySignature && activeKeySignatures[randomIndex].key === previousKeySignature.key
         );
 
@@ -266,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkAnswer(selected, correct) {
         // Extract the root note from the key signature name
-        // This handles both "A major" and "A minor" expecting "A" as the answer
         const rootNote = correct.split(' ')[0]; // Gets "A" from "A major" or "A minor"
         
         if (selected === rootNote) {
