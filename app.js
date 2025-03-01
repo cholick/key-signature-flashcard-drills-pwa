@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timeLeft = 0;
     let timer;
     let currentKeySignature;
+    let previousKeySignature = null;
     let showingFeedback = false;
 
     // Hide exercise, score, and timer initially
@@ -184,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Apply scaling to make everything bigger
         context.scale(1.6, 1.6); // Scale up by 60%
-        
+
         const stave = new VF.Stave(10, -15, 170); // Negative y value moves it up
         stave.addClef("treble");
         stave.addKeySignature(keySignature.key);
@@ -194,11 +195,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextQuestion() {
-        const randomIndex = Math.floor(Math.random() * keySignatures.length);
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * keySignatures.length);
+        } while (
+            // Keep trying until we get a different key signature than before
+            previousKeySignature && keySignatures[randomIndex].key === previousKeySignature.key
+        );
+
         currentKeySignature = keySignatures[randomIndex];
+        previousKeySignature = currentKeySignature;
 
         // Only clear feedback when explicitly calling this function from startExercise
-        // but not when showing a new question after feedback
         if (!showingFeedback) {
             // Reset the feedback element to empty state but keep space reserved
             const feedbackDiv = document.getElementById('feedback');
