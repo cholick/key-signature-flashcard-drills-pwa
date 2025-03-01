@@ -148,3 +148,14 @@ button#start-button {
     background-color: rgba(244, 67, 54, 0.2);
     color: #c62828;
 }
+
+.mode-display {
+    text-align: right;
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 1.2em;
+    max-width: 500px; /* Match the max-width of the choices grid */
+    margin-left: auto;
+    margin-right: auto;
+    padding-right: 0;
+}

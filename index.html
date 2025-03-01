@@ -9,26 +9,41 @@
     <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.2/build/cjs/vexflow.js"></script>
 </head>
 <body>
-    <div id="app">
-        <h1>Key Signature Flash Drills</h1>
-
-        <div id="exercise">
+    <div class="container">
+        <h1>Key Signature Quiz</h1>
+                
+        <div id="exercise" class="hidden">
+            <div id="feedback" class="hidden">&nbsp;</div>
             <div id="notation"></div>
-            <!-- Key signature and choices will be dynamically inserted here -->
         </div>
-        <div id="score">
-            <p>
-                Correct:
-                <span id="correct-count">0</span>
-                /
-                <span id="total-count">0</span>
-            </p>
-        </div>
-        <button id="start-button">Start</button>
-        <div id="timer-container">
+        
+        <div id="timer-container" class="hidden">
             <div id="timer-bar"></div>
         </div>
+        
+        <div id="score" class="hidden">
+            <span id="correct-count">0</span> / <span id="total-count">0</span> correct
+        </div>
     </div>
+
+    <div id="controls-container">
+        <div class="mode-selection">
+            <div class="radio-container">
+                <input type="radio" id="mode-major" name="key-mode" value="major" checked>
+                <label for="mode-major">Major Keys</label>
+            </div>
+            <div class="radio-container">
+                <input type="radio" id="mode-minor" name="key-mode" value="minor">
+                <label for="mode-minor">Minor Keys</label>
+            </div>
+            <div class="radio-container">
+                <input type="radio" id="mode-both" name="key-mode" value="both">
+                <label for="mode-both">Both Major & Minor</label>
+            </div>
+        </div>
+        <button id="start-button">Start</button>
+    </div>
+    
     <script src="app.js"></script>
 </body>
 </html>
