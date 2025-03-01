@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let timer;
     let currentKeySignature;
     let showingFeedback = false;
-    
+
     // Hide exercise, score, and timer initially
     exerciseDiv.classList.add('hidden');
     scoreDiv.classList.add('hidden');
     timerContainer.classList.add('hidden');
-    
-    // Define key signatures with accidental info
+
+    // Define key signatures with accidental info - these are the only signatures that will be shown/tested
     const keySignatures = [
         { name: 'C', key: 'C', mode: 'major', accidental: 'no accidentals' },
         { name: 'G', key: 'G', mode: 'major', accidental: '1 sharp' },
@@ -40,73 +40,79 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'G♭', key: 'Gb', mode: 'major', accidental: '6 flats' },
         { name: 'C♭', key: 'Cb', mode: 'major', accidental: '7 flats' }
     ];
-    
+
+    // Define all possible key options for the buttons
+    const allKeyOptions = [
+        'C', 'C♭', 'C#', 'D', 'D♭', 'D#',
+        'E', 'E♭', 'F', 'F#', 'G', 'G♭',
+        'G#', 'A', 'A#', 'A♭', 'B', 'B♭'
+    ];
+
     function startExercise() {
         correctCount = 0;
         incorrectCount = 0;
         timeLeft = startTime;
         correctCountSpan.textContent = correctCount;
         totalCountSpan.textContent = correctCount + incorrectCount;
-        
+
         // Reset timer bar to full width without animation
         timerBar.style.transition = 'none'; // Disable transition
         timerBar.style.width = '100%';
-        
+
         // Force a reflow to apply the changes immediately
         void timerBar.offsetWidth;
-        
+
         // Re-enable transition for subsequent updates
         timerBar.style.transition = 'width 1s linear';
-        
+
         // Hide the start button instead of disabling it
         startButton.classList.add('hidden');
-        
+
         // Show exercise, score, and timer
         exerciseDiv.classList.remove('hidden');
         scoreDiv.classList.remove('hidden');
         timerContainer.classList.remove('hidden');
-        
+
         // Create the choices div once
         const choicesDiv = document.createElement('div');
         choicesDiv.className = 'choices';
         exerciseDiv.appendChild(choicesDiv);
-        
-        // Create choice buttons once
-        keySignatures.forEach(ks => {
+
+        // Create choice buttons for all possible keys
+        allKeyOptions.forEach(keyName => {
             const button = document.createElement('button');
             button.className = 'choice-button';
-            button.textContent = ks.name;
-            button.dataset.key = ks.key;  // Store the key for later reference
+            button.textContent = keyName;
             choicesDiv.appendChild(button);
         });
-        
+
         // Add the event listener to the container using event delegation
         choicesDiv.addEventListener('click', (event) => {
             if (event.target.classList.contains('choice-button')) {
                 checkAnswer(event.target.textContent, currentKeySignature.name);
             }
         });
-        
+
         // Create feedback element with initial empty state to reserve space
         const feedbackDiv = document.createElement('div');
         feedbackDiv.id = 'feedback';
         feedbackDiv.innerHTML = '&nbsp;'; // Non-breaking space to take up height
         exerciseDiv.insertBefore(feedbackDiv, exerciseDiv.firstChild);
-        
+
         nextQuestion();
         timer = setInterval(updateTimer, 1000);
     }
 
     function updateTimer() {
         timeLeft--;
-        
+
         // Update the timer bar width
         const percentageLeft = (timeLeft / startTime) * 100;
         timerBar.style.width = `${percentageLeft}%`;
-        
+
         if (timeLeft <= 0) {
             clearInterval(timer);
-            
+
             // Small delay to allow the timer bar animation to complete
             setTimeout(() => {
                 endExercise();
@@ -117,13 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function endExercise() {
         // Show the start button again
         startButton.classList.remove('hidden');
-        
+
         // Remove the choices when the exercise ends
         const choicesDiv = exerciseDiv.querySelector('.choices');
         if (choicesDiv) {
             exerciseDiv.removeChild(choicesDiv);
         }
-        
+
         // Create and show the modal instead of alert
         showResultModal();
     }
@@ -132,32 +138,32 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create the modal overlay
         const modalOverlay = document.createElement('div');
         modalOverlay.className = 'modal-overlay';
-        
+
         // Create the modal
         const modal = document.createElement('div');
         modal.className = 'modal';
-        
+
         // Create modal content
         const heading = document.createElement('h2');
         const percent = Math.round((correctCount / (correctCount + incorrectCount)) * 100);
         heading.textContent = `${percent}% Correct`;
-        
+
         const resultText = document.createElement('p');
         resultText.textContent = `You got ${correctCount} out of ${correctCount + incorrectCount} correct.`;
-        
+
         const closeButton = document.createElement('button');
         closeButton.className = 'modal-button';
         closeButton.textContent = 'Close';
         closeButton.addEventListener('click', () => {
             document.body.removeChild(modalOverlay);
         });
-        
+
         // Assemble the modal
         modal.appendChild(heading);
         modal.appendChild(resultText);
         modal.appendChild(closeButton);
         modalOverlay.appendChild(modal);
-        
+
         // Add the modal to the page
         document.body.appendChild(modalOverlay);
     }
@@ -165,24 +171,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderKeySignature(keySignature) {
         // Clear the notation div
         notationDiv.innerHTML = '';
-        
+
         // Create a VexFlow renderer
         const VF = Vex.Flow;
         const renderer = new VF.Renderer(notationDiv, VF.Renderer.Backends.SVG);
-        
-        // Configure the rendering context with increased dimensions
-        renderer.resize(240, 150); // Increased height and width
+
+        // Configure the rendering context with optimized dimensions
+        renderer.resize(300, 150); // Reduced height to decrease white space
+
         const context = renderer.getContext();
         context.setFont("Arial", 10);
-        
+
         // Apply scaling to make everything bigger
-        context.scale(1.3, 1.3); // Scale up by 30%
+        context.scale(1.6, 1.6); // Scale up by 60%
         
-        // Create a stave (adjusted width to account for scaling)
-        const stave = new VF.Stave(10, 0, 170);
+        const stave = new VF.Stave(10, -15, 170); // Negative y value moves it up
         stave.addClef("treble");
         stave.addKeySignature(keySignature.key);
-        
+
         // Draw the stave
         stave.setContext(context).draw();
     }
@@ -190,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function nextQuestion() {
         const randomIndex = Math.floor(Math.random() * keySignatures.length);
         currentKeySignature = keySignatures[randomIndex];
-        
+
         // Only clear feedback when explicitly calling this function from startExercise
         // but not when showing a new question after feedback
         if (!showingFeedback) {
@@ -201,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 feedbackDiv.className = ''; // Remove any previous styling classes
             }
         }
-        
+
         // Render the key signature using VexFlow
         renderKeySignature(currentKeySignature);
     }
@@ -210,27 +216,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Strip HTML to compare just the text
         const selectedClean = selected.replace(/\s+/g, '');
         const correctClean = correct.replace(/\s+/g, '').replace(/<[^>]*>/g, '');
-        
+
         // Get the feedback element
         const feedbackDiv = document.getElementById('feedback');
-        
+
         if (selectedClean === correctClean) {
             correctCount++;
             correctCountSpan.textContent = correctCount;
-            
+
             // Show correct feedback with the key signature info
             feedbackDiv.textContent = `Correct! ${currentKeySignature.name} is ${currentKeySignature.accidental}`;
             feedbackDiv.className = 'correct';
         } else {
             incorrectCount++;
-            
+
             // Show incorrect feedback with the correct answer and user's answer
             feedbackDiv.textContent = `Incorrect: ${currentKeySignature.accidental} is ${currentKeySignature.name}. You answered ${selected}`;
             feedbackDiv.className = 'incorrect';
         }
-        
+
         totalCountSpan.textContent = correctCount + incorrectCount;
-        
+
         // Set the flag that we're showing feedback
         showingFeedback = true;
 

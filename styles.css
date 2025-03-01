@@ -25,7 +25,7 @@ body {
 .choices {
     margin: 20px 0;
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 buttons per row */
+    grid-template-columns: repeat(6, 1fr); /* 5 buttons per row */
     grid-gap: 10px;
     max-width: 500px;
     margin-left: auto;
