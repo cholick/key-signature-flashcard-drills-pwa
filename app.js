@@ -72,12 +72,18 @@ document.addEventListener('DOMContentLoaded', () => {
         'G#', 'A', 'A#', 'A♭', 'B', 'B♭'
     ];
 
+    // Store the click handler so we can remove it later
+    let choicesClickHandler;
+
     function startExercise() {
         correctCount = 0;
         incorrectCount = 0;
         timeLeft = startTime;
         correctCountSpan.textContent = correctCount;
         totalCountSpan.textContent = correctCount + incorrectCount;
+        
+        // Reset the feedback state
+        showingFeedback = false;
 
         // Determine which mode is selected
         let selectedMode = 'major'; // Default
@@ -121,6 +127,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear and show choices div
         choicesDiv.innerHTML = '';
         choicesDiv.classList.remove('hidden');
+        
+        // Remove previous event listener if it exists
+        if (choicesClickHandler) {
+            choicesDiv.removeEventListener('click', choicesClickHandler);
+        }
 
         // Create choice buttons for all possible keys
         allKeyOptions.forEach(keyName => {
@@ -130,12 +141,15 @@ document.addEventListener('DOMContentLoaded', () => {
             choicesDiv.appendChild(button);
         });
 
-        // Add the event listener to the container using event delegation
-        choicesDiv.addEventListener('click', (event) => {
+        // Create new click handler and store reference
+        choicesClickHandler = (event) => {
             if (event.target.classList.contains('choice-button')) {
                 checkAnswer(event.target.textContent, currentKeySignature.name);
             }
-        });
+        };
+        
+        // Add the event listener using the stored reference
+        choicesDiv.addEventListener('click', choicesClickHandler);
 
         // Initialize the feedback div for the new exercise
         feedbackDiv.innerHTML = '&nbsp;'; // Non-breaking space to take up height
