@@ -10,7 +10,9 @@ just via chat prompts. It works in my testing, but I'm sure has some edge missed
 
 It displays random signatures for 5 minutes, allowing the choice of Major, Minor, or both.
 
-![Screenshot of the app](docs/screenshot.png)
+---
+
+<img src="docs/screenshot.png" width="200" >
 
 ## To-do
 
