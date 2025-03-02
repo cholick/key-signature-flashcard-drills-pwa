@@ -44,10 +44,27 @@ body {
     margin: 0;
     width: 100%;
     height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    -webkit-touch-callout: none;
 }
 
+/* Apply hover effects only on devices that support hover */
+@media (hover: hover) {
+    .choice-button:hover {
+        background-color: #e0e0e0;
+    }
+}
+
+/* Add active state for touch devices */
+.choice-button:active {
+    background-color: #a2a2a2;
+    border-color: #666666;
+}
+
+/* Remove the original hover that causes the sticky effect on mobile */
 .choice-button:hover {
-    background-color: #e0e0e0;
+    /* This rule is intentionally empty to override the previous hover style */
 }
 
 #score {
