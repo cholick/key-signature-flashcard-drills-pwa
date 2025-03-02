@@ -75,7 +75,7 @@ button#start-button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 4px;
@@ -94,7 +94,7 @@ button#start-button {
 #timer-bar {
     height: 100%;
     width: 100%;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     transition: width 1s linear;
 }
 
@@ -134,7 +134,7 @@ button#start-button {
 .modal-button {
     margin-top: 15px;
     padding: 8px 16px;
-    background-color: #4CAF50;
+    background-color: #4caf50;
     color: white;
     border: none;
     border-radius: 4px;

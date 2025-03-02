@@ -1,5 +1,5 @@
 // When deploying a new version, increment this version number
-const VERSION = '1';
+const VERSION = '2';
 const CACHE_NAME = `key-signature-drills-v${VERSION}`;
 
 const ASSETS_TO_CACHE = [

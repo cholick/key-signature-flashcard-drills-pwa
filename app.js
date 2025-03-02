@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const startTime = 10;
+    const startTime = 300;
 
     const controlsContainer = document.getElementById('controls-container');
     const startButton = document.getElementById('start-button');
