@@ -17,4 +17,5 @@ It displays random signatures for 5 minutes, allowing the choice of Major, Minor
 ## To-do
 
 - [ ] The old app seemed to favor pulling in what you recently got wrong, add logic for that
+- [ ] Non-manual way to increment cache
 - [ ] Use storage to track progress
