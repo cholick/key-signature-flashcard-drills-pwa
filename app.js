@@ -206,11 +206,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create modal content
         const heading = document.createElement('h2');
-        const percent = Math.round((correctCount / (correctCount + incorrectCount)) * 100);
+        const totalAnswered = correctCount + incorrectCount;
+        const percent = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
         heading.textContent = `${percent}% Correct`;
 
         const resultText = document.createElement('p');
-        resultText.textContent = `You got ${correctCount} out of ${correctCount + incorrectCount} correct.`;
+        resultText.textContent = `You got ${correctCount} out of ${totalAnswered} correct.`;
 
         const closeButton = document.createElement('button');
         closeButton.className = 'modal-button';
