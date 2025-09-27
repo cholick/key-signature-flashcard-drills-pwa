@@ -23,6 +23,5 @@ The app is available at https://key-signature.cholick.com/
 ## To-do
 
 - [ ] Allow enharmonic equivalents for correct answers
-- [ ] The old app seemed to favor pulling in what you recently got wrong, add logic for that
 - [ ] Non-manual way to increment cache
 - [ ] Use local storage to track progress

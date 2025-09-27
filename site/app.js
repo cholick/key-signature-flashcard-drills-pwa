@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const startTime = 300;
+    const incorrectMultiplier = 4;
 
     const controlsContainer = document.getElementById('controls-container');
     const startButton = document.getElementById('start-button');
@@ -31,38 +32,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // Define both major and minor key signatures
     const keySignatures = [
         // Major keys
-        { name: 'C major', key: 'C', mode: 'major', accidental: 'no accidentals' },
-        { name: 'G major', key: 'G', mode: 'major', accidental: '1 sharp' },
-        { name: 'D major', key: 'D', mode: 'major', accidental: '2 sharps' },
-        { name: 'A major', key: 'A', mode: 'major', accidental: '3 sharps' },
-        { name: 'E major', key: 'E', mode: 'major', accidental: '4 sharps' },
-        { name: 'B major', key: 'B', mode: 'major', accidental: '5 sharps' },
-        { name: 'F# major', key: 'F#', mode: 'major', accidental: '6 sharps' },
-        { name: 'C# major', key: 'C#', mode: 'major', accidental: '7 sharps' },
-        { name: 'F major', key: 'F', mode: 'major', accidental: '1 flat' },
-        { name: 'B♭ major', key: 'Bb', mode: 'major', accidental: '2 flats' },
-        { name: 'E♭ major', key: 'Eb', mode: 'major', accidental: '3 flats' },
-        { name: 'A♭ major', key: 'Ab', mode: 'major', accidental: '4 flats' },
-        { name: 'D♭ major', key: 'Db', mode: 'major', accidental: '5 flats' },
-        { name: 'G♭ major', key: 'Gb', mode: 'major', accidental: '6 flats' },
-        { name: 'C♭ major', key: 'Cb', mode: 'major', accidental: '7 flats' },
+        { name: 'C major', key: 'C', mode: 'major', accidental: 'no accidentals', lastWrong: false },
+        { name: 'G major', key: 'G', mode: 'major', accidental: '1 sharp', lastWrong: false },
+        { name: 'D major', key: 'D', mode: 'major', accidental: '2 sharps', lastWrong: false },
+        { name: 'A major', key: 'A', mode: 'major', accidental: '3 sharps', lastWrong: false },
+        { name: 'E major', key: 'E', mode: 'major', accidental: '4 sharps', lastWrong: false },
+        { name: 'B major', key: 'B', mode: 'major', accidental: '5 sharps', lastWrong: false },
+        { name: 'F# major', key: 'F#', mode: 'major', accidental: '6 sharps', lastWrong: false },
+        { name: 'C# major', key: 'C#', mode: 'major', accidental: '7 sharps', lastWrong: false },
+        { name: 'F major', key: 'F', mode: 'major', accidental: '1 flat', lastWrong: false },
+        { name: 'B♭ major', key: 'Bb', mode: 'major', accidental: '2 flats', lastWrong: false },
+        { name: 'E♭ major', key: 'Eb', mode: 'major', accidental: '3 flats', lastWrong: false },
+        { name: 'A♭ major', key: 'Ab', mode: 'major', accidental: '4 flats', lastWrong: false },
+        { name: 'D♭ major', key: 'Db', mode: 'major', accidental: '5 flats', lastWrong: false },
+        { name: 'G♭ major', key: 'Gb', mode: 'major', accidental: '6 flats', lastWrong: false },
+        { name: 'C♭ major', key: 'Cb', mode: 'major', accidental: '7 flats', lastWrong: false },
 
         // Minor keys
-        { name: 'A minor', key: 'Am', mode: 'minor', accidental: 'no accidentals' },
-        { name: 'E minor', key: 'Em', mode: 'minor', accidental: '1 sharp' },
-        { name: 'B minor', key: 'Bm', mode: 'minor', accidental: '2 sharps' },
-        { name: 'F# minor', key: 'F#m', mode: 'minor', accidental: '3 sharps' },
-        { name: 'C# minor', key: 'C#m', mode: 'minor', accidental: '4 sharps' },
-        { name: 'G# minor', key: 'G#m', mode: 'minor', accidental: '5 sharps' },
-        { name: 'D# minor', key: 'D#m', mode: 'minor', accidental: '6 sharps' },
-        { name: 'A# minor', key: 'A#m', mode: 'minor', accidental: '7 sharps' },
-        { name: 'D minor', key: 'Dm', mode: 'minor', accidental: '1 flat' },
-        { name: 'G minor', key: 'Gm', mode: 'minor', accidental: '2 flats' },
-        { name: 'C minor', key: 'Cm', mode: 'minor', accidental: '3 flats' },
-        { name: 'F minor', key: 'Fm', mode: 'minor', accidental: '4 flats' },
-        { name: 'B♭ minor', key: 'Bbm', mode: 'minor', accidental: '5 flats' },
-        { name: 'E♭ minor', key: 'Ebm', mode: 'minor', accidental: '6 flats' },
-        { name: 'A♭ minor', key: 'Cbm', mode: 'minor', accidental: '7 flats' }
+        { name: 'A minor', key: 'Am', mode: 'minor', accidental: 'no accidentals', lastWrong: false },
+        { name: 'E minor', key: 'Em', mode: 'minor', accidental: '1 sharp', lastWrong: false },
+        { name: 'B minor', key: 'Bm', mode: 'minor', accidental: '2 sharps', lastWrong: false },
+        { name: 'F# minor', key: 'F#m', mode: 'minor', accidental: '3 sharps', lastWrong: false },
+        { name: 'C# minor', key: 'C#m', mode: 'minor', accidental: '4 sharps', lastWrong: false },
+        { name: 'G# minor', key: 'G#m', mode: 'minor', accidental: '5 sharps', lastWrong: false },
+        { name: 'D# minor', key: 'D#m', mode: 'minor', accidental: '6 sharps', lastWrong: false },
+        { name: 'A# minor', key: 'A#m', mode: 'minor', accidental: '7 sharps', lastWrong: false },
+        { name: 'D minor', key: 'Dm', mode: 'minor', accidental: '1 flat', lastWrong: false },
+        { name: 'G minor', key: 'Gm', mode: 'minor', accidental: '2 flats', lastWrong: false },
+        { name: 'C minor', key: 'Cm', mode: 'minor', accidental: '3 flats', lastWrong: false },
+        { name: 'F minor', key: 'Fm', mode: 'minor', accidental: '4 flats', lastWrong: false },
+        { name: 'B♭ minor', key: 'Bbm', mode: 'minor', accidental: '5 flats', lastWrong: false },
+        { name: 'E♭ minor', key: 'Ebm', mode: 'minor', accidental: '6 flats', lastWrong: false },
+        { name: 'A♭ minor', key: 'Cbm', mode: 'minor', accidental: '7 flats', lastWrong: false }
     ];
 
     // Define all possible key options for the buttons
@@ -74,6 +75,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Store the click handler so we can remove it later
     let choicesClickHandler;
+
+    // CDF and lots of better algorithm, but keeping it simple
+    function selectWeightedRandom(keySignatures) {
+        const bucket = [];
+        
+        keySignatures.forEach(ks => {
+            bucket.push(ks);
+            
+            // If last answer was wrong, add extra copies
+            if (ks.lastWrong) {
+                for (let i = 1; i < incorrectMultiplier; i++) {
+                    bucket.push(ks);
+                }
+            }
+        });
+        
+        return bucket[Math.floor(Math.random() * bucket.length)];
+    }
 
     function startExercise() {
         correctCount = 0;
@@ -102,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Both modes
             activeKeySignatures = keySignatures;
         }
+
+        // Reset all lastWrong flags for a fresh start
+        keySignatures.forEach(ks => {
+            ks.lastWrong = false;
+        });
 
         // Reset previousKeySignature when starting a new exercise
         previousKeySignature = null;
@@ -272,14 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function nextQuestion() {
-        let randomIndex;
+        let selectedKeySignature;
         do {
-            randomIndex = Math.floor(Math.random() * activeKeySignatures.length);
+            selectedKeySignature = selectWeightedRandom(activeKeySignatures);
         } while (
-            previousKeySignature && activeKeySignatures[randomIndex].key === previousKeySignature.key
+            previousKeySignature && selectedKeySignature.key === previousKeySignature.key
         );
 
-        currentKeySignature = activeKeySignatures[randomIndex];
+        currentKeySignature = selectedKeySignature;
         previousKeySignature = currentKeySignature;
 
         // Only clear feedback when explicitly calling this function from startExercise
@@ -308,11 +332,17 @@ document.addEventListener('DOMContentLoaded', () => {
             correctCount++;
             correctCountSpan.textContent = correctCount;
 
+            // Mark as correctly answered (no longer gets extra chances)
+            currentKeySignature.lastWrong = false;
+
             // Show correct feedback with the key signature info
             feedbackDiv.textContent = `Correct! ${currentKeySignature.name} is ${currentKeySignature.accidental}`;
             feedbackDiv.className = 'correct';
         } else {
             incorrectCount++;
+
+            // Mark as incorrectly answered (will get extra chances in future selections)
+            currentKeySignature.lastWrong = true;
 
             // Show incorrect feedback with the correct answer and user's answer
             // Display the expected answer in the same case as was presented to the user
