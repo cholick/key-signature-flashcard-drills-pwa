@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timeLeft = startTime;
         correctCountSpan.textContent = correctCount;
         totalCountSpan.textContent = correctCount + incorrectCount;
-        
+
         // Reset the feedback state
         showingFeedback = false;
 
@@ -128,19 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear and show choices div
         choicesDiv.innerHTML = '';
         choicesDiv.classList.remove('hidden');
-        
+
         // Remove previous event listener if it exists
         if (choicesClickHandler) {
             choicesDiv.removeEventListener('click', choicesClickHandler);
         }
-
-        // Create choice buttons for all possible keys
-        allKeyOptions.forEach(keyName => {
-            const button = document.createElement('button');
-            button.className = 'choice-button';
-            button.textContent = keyName;
-            choicesDiv.appendChild(button);
-        });
 
         // Create new click handler and store reference
         choicesClickHandler = (event) => {
@@ -148,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 checkAnswer(event.target.textContent, currentKeySignature.name);
             }
         };
-        
+
         // Add the event listener using the stored reference
         choicesDiv.addEventListener('click', choicesClickHandler);
 
@@ -181,13 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function endExercise() {
         // Show the controls container again
         controlsContainer.style.display = ''; // Reset to default display
-        
+
         // Hide the exercise elements
         notationDiv.innerHTML = ''; // Clear the key signature
         feedbackDiv.classList.add('hidden');
         scoreDiv.classList.add('hidden');
         modeDisplayDiv.classList.add('hidden');
-        
+
         // Clear and hide the choices div
         choicesDiv.innerHTML = '';
         choicesDiv.classList.add('hidden');
@@ -234,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderKeySignature(keySignature) {
         // Clear the notation div
         notationDiv.innerHTML = '';
-        
+
         // Update mode display
         modeDisplayDiv.textContent = keySignature.mode === 'major' ? 'Major' : 'Minor';
         modeDisplayDiv.classList.remove('hidden');
@@ -260,6 +252,26 @@ document.addEventListener('DOMContentLoaded', () => {
         stave.setContext(context).draw();
     }
 
+    function createChoiceButtons() {
+        // Clear existing buttons
+        choicesDiv.innerHTML = '';
+
+        // Create choice buttons - display in lowercase for minor keys
+        allKeyOptions.forEach(keyName => {
+            const button = document.createElement('button');
+            button.className = 'choice-button';
+
+            // For minor keys, display choices in lowercase
+            if (currentKeySignature && currentKeySignature.mode === 'minor') {
+                button.textContent = keyName.toLowerCase();
+            } else {
+                button.textContent = keyName;
+            }
+
+            choicesDiv.appendChild(button);
+        });
+    }
+
     function nextQuestion() {
         let randomIndex;
         do {
@@ -278,6 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackDiv.className = ''; // Remove any previous styling classes
         }
 
+        // Create choice buttons based on current key signature
+        createChoiceButtons();
+
         // Render the key signature using VexFlow
         renderKeySignature(currentKeySignature);
     }
@@ -285,19 +300,25 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkAnswer(selected, correct) {
         // Extract the root note from the key signature name
         const rootNote = correct.split(' ')[0]; // Gets "A" from "A major" or "A minor"
-        
-        if (selected === rootNote) {
+
+        // For comparison, normalize both selected and rootNote to uppercase
+        const normalizedSelected = selected.toUpperCase();
+        const normalizedRoot = rootNote.toUpperCase();
+
+        if (normalizedSelected === normalizedRoot) {
             correctCount++;
             correctCountSpan.textContent = correctCount;
-            
+
             // Show correct feedback with the key signature info
             feedbackDiv.textContent = `Correct! ${currentKeySignature.name} is ${currentKeySignature.accidental}`;
             feedbackDiv.className = 'correct';
         } else {
             incorrectCount++;
-            
+
             // Show incorrect feedback with the correct answer and user's answer
-            feedbackDiv.textContent = `Incorrect: ${currentKeySignature.accidental} is ${currentKeySignature.name}. You answered ${selected}`;
+            // Display the expected answer in the same case as was presented to the user
+            const expectedAnswer = currentKeySignature.mode === 'minor' ? rootNote.toLowerCase() : rootNote;
+            feedbackDiv.textContent = `Incorrect: ${currentKeySignature.accidental} is ${currentKeySignature.name}. You answered ${selected}, correct answer is ${expectedAnswer}`;
             feedbackDiv.className = 'incorrect';
         }
 
