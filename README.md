@@ -19,10 +19,3 @@ The app is available at https://key-signature.cholick.com/
 ## Deployment
 
 [Cloudflare pages](https://developers.cloudflare.com/pages/) will [auto-deploy commits](https://developers.cloudflare.com/pages/get-started/git-integration/) and uses `./site` as the root for what it deploys. As of now there's no [build command](https://developers.cloudflare.com/pages/get-started/git-integration/#configure-your-build-settings); Pages will just deploy the directory.
-
-## To-do
-
-- [ ] Allow enharmonic equivalents for correct answers
-- [ ] The old app seemed to favor pulling in what you recently got wrong, add logic for that
-- [ ] Non-manual way to increment cache
-- [ ] Use local storage to track progress
