@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Store the click handler so we can remove it later
     let choicesClickHandler;
 
-    // CDF and lots of better algorithm, but keeping it simple
+    // CDF and lots of better algorithms, but keeping it simple
     function selectWeightedRandom(keySignatures) {
         const bucket = [];
         
