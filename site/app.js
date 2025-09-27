@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'F minor', key: 'Fm', mode: 'minor', accidental: '4 flats' },
         { name: 'B♭ minor', key: 'Bbm', mode: 'minor', accidental: '5 flats' },
         { name: 'E♭ minor', key: 'Ebm', mode: 'minor', accidental: '6 flats' },
-        { name: 'C♭ minor', key: 'Cbm', mode: 'minor', accidental: '7 flats' }
+        { name: 'A♭ minor', key: 'Cbm', mode: 'minor', accidental: '7 flats' }
     ];
 
     // Define all possible key options for the buttons
