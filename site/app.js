@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     timerContainer.classList.add('hidden');
 
     // Define both major and minor key signatures
-    // TODO: fix for enharmonic equivalents
     const keySignatures = [
         // Major keys
         { name: 'C major', key: 'C', mode: 'major', accidental: 'no accidentals' },
